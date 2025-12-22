@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>给zxy的一份温暖的礼物</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    body {
       background: #e6f7ff;
       font-family: "Microsoft YaHei", sans-serif;
-      overflow: hidden;
-      height: 100vh;
       cursor: pointer;
     }
 
@@ -121,10 +123,17 @@
     "愿你被岁月温柔相待", "心中有光，何惧路长", "你是我平凡日子里的小确幸"
   ];
 
+  function getViewportSize() {
+    return {
+      w: document.documentElement.clientWidth || window.innerWidth,
+      h: document.documentElement.clientHeight || window.innerHeight
+    };
+  }
+
   function createMessage() {
     const msg = document.createElement("div");
     msg.className = "message";
-    
+
     // 随机决定是否用星星角饰（30% 概率）
     if (Math.random() > 0.7) {
       msg.classList.add("star");
@@ -132,8 +141,9 @@
 
     msg.textContent = messages[Math.floor(Math.random() * messages.length)];
 
-    const x = 30 + Math.random() * (window.innerWidth - 60);
-    const y = 30 + Math.random() * (window.innerHeight - 60);
+    const { w, h } = getViewportSize();
+    const x = 30 + Math.random() * (w - 60);
+    const y = 30 + Math.random() * (h - 60);
     msg.style.left = x + 'px';
     msg.style.top = y + 'px';
 
