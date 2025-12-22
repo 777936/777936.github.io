@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>一份温暖的礼物</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e6f7ff;
+      font-family: "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      cursor: pointer;
+    }
+
+    .message {
+      position: absolute;
+      padding: 12px 16px;
+      border-radius: 12px;
+      /* 主体样式 */
+      background: var(--bg, #ffffff);
+      color: #333;
+      font-size: var(--fs, 14px);
+      max-width: 200px;
+      text-align: center;
+      opacity: 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      z-index: 10;
+      animation: float 5s ease-out forwards;
+    }
+
+    /* 🌸 四角装饰：用伪元素画小爱心 */
+    .message::before,
+    .message::after {
+      content: "❤";
+      position: absolute;
+      font-size: 10px;
+      color: var(--deco-color, #ff9ec1);
+      opacity: 0.7;
+      z-index: -1;
+      text-shadow: 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    .message::before {
+      top: 8px;
+      left: 8px;
+    }
+    .message::after {
+      bottom: 8px;
+      right: 8px;
+    }
+
+    /* 可选：再加两个角（星星） */
+    .message.star::before {
+      content: "★";
+      color: #ffd700;
+    }
+    .message.star::after {
+      content: "★";
+      color: #ffd700;
+    }
+
+    @keyframes float {
+      0% {
+        opacity: 0;
+        transform: translateX(0) translateY(0);
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(var(--tx, 0px)) translateY(var(--ty, -150px));
+      }
+    }
+
+    /* 💖 点击爱心 */
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      color: #ff6b9d;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 9999;
+      animation: heartFloat 1.2s ease-out forwards;
+    }
+    @keyframes heartFloat {
+      0% {
+        transform: scale(0.5) translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5) translateY(-80px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  const messages = [
+    "多喝水哦~", "保持微笑呀", "别熬夜", "愿所有烦恼都消失", "要相信自己奥",
+    "你超棒的", "学会爱自己，才能更好地爱别人", "我想你了", "金榜题名",
+    "别太累啦，偶尔偷懒也很好", "今天也要开心", "世界因你而美好",
+    "你值得被温柔以待", "慢慢来，别着急", "一切都会好起来的",
+    "有人偷偷爱着你", "你的存在很有意义", "记得吃早餐！", "少看手机多睡觉",
+    "好运正在路上", "心怀梦想，眼里有光", "生活明朗，万物可爱",
+    "平安喜乐，万事胜意", "所求皆如愿", "春风十里，不如你笑",
+    "做自己，就很了不起", "幸福藏在小事里", "你比想象中更强大",
+    "愿你自由如风", "坚定如山", "三冬暖，春不寒", "天黑有灯，下雨有伞",
+    "有人懂你的奇奇怪怪", "陪你可可爱爱", "未来可期", "你也是",
+    "允许自己不完美", "累了就休息", "没人怪你", "开心最重要",
+    "其他都是小事", "你已经很棒了", "真的", "继续保持",
+    "闪闪发光吧", "小太阳就是你", "今天比昨天更接近梦想",
+    "愿你被岁月温柔相待", "心中有光，何惧路长", "你是我平凡日子里的小确幸"
+  ];
+
+  function createMessage() {
+    const msg = document.createElement("div");
+    msg.className = "message";
+    
+    // 随机决定是否用星星角饰（30% 概率）
+    if (Math.random() > 0.7) {
+      msg.classList.add("star");
+    }
+
+    msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+    const x = 30 + Math.random() * (window.innerWidth - 60);
+    const y = 30 + Math.random() * (window.innerHeight - 60);
+    msg.style.left = x + 'px';
+    msg.style.top = y + 'px';
+
+    const fontSize = 12 + Math.random() * 7;
+    msg.style.setProperty('--fs', fontSize + 'px');
+
+    // 背景色
+    const bgColors = ["#ffffff", "#f0f9ff", "#fff7e6", "#f9f0ff", "#f6ffed"];
+    const bgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+    msg.style.setProperty('--bg', bgColor);
+
+    // 装饰色（与背景协调）
+    let decoColor;
+    if (bgColor === "#fff7e6") decoColor = "#ff9e7d"; // 橘粉
+    else if (bgColor === "#f9f0ff") decoColor = "#d48cff"; // 紫
+    else if (bgColor === "#f6ffed") decoColor = "#77dd77"; // 绿
+    else decoColor = "#ff9ec1"; // 默认粉红
+    msg.style.setProperty('--deco-color', decoColor);
+
+    // 快速飘动
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 200 + Math.random() * 300;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+
+    msg.style.setProperty('--tx', tx + 'px');
+    msg.style.setProperty('--ty', ty + 'px');
+
+    document.body.appendChild(msg);
+
+    setTimeout(() => {
+      if (msg.parentNode) msg.remove();
+    }, 5200);
+  }
+
+  // 快速生成
+  for (let i = 0; i < 12; i++) {
+    setTimeout(createMessage, i * 200);
+  }
+  setInterval(createMessage, 500);
+
+  // 点击出爱心
+  document.body.addEventListener('click', (e) => {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    heart.style.left = (e.clientX - 12) + 'px';
+    heart.style.top = (e.clientY - 12) + 'px';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1200);
+  });
+</script>
+
+</body>
+</html>
